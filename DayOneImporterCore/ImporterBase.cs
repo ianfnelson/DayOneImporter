@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         foreach (var batch in MapEntries(sourceItems).Batch(BatchSize))
         {
             var batchList = batch.ToList();
-            WriteOutputFile(batchList, batchNumber);
+            BuildOutputZip(batchList, batchNumber);
             Logger.LogInformation("Done batch " + batchNumber);
             batchNumber++;
         }
@@ -62,13 +63,23 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         }
     }
 
-    protected virtual void WriteOutputFile(IList<Entry> mappedEntries, int batchNumber)
+    protected virtual void BuildOutputZip(IList<Entry> mappedEntries, int batchNumber)
     {
-        Directory.CreateDirectory("/Users/ian/dev/DayOneOutput/" + SourceSystemName + "/" + batchNumber);
+        var batchFolderName = "/Users/ian/dev/DayOneOutput/" + SourceSystemName + "/" + batchNumber;
         
+        Directory.CreateDirectory(batchFolderName);
+        Directory.CreateDirectory(batchFolderName + "/photos");
+
+        WriteOutputFile(mappedEntries, batchFolderName);
+        
+        ZipFile.CreateFromDirectory(batchFolderName, "/Users/ian/dev/DayOneOutput/" + SourceSystemName + "/" + batchNumber + ".zip");
+    }
+    
+    private void WriteOutputFile(IList<Entry> mappedEntries, string batchFolderName)
+    {
         var dayOneFile = new DayOneFile { Entries = mappedEntries };
 
-        using FileStream createStream = File.Create( "/Users/ian/dev/DayOneOutput/" + SourceSystemName + "/" + batchNumber+ "/journal.json");
+        using FileStream createStream = File.Create( batchFolderName +"/journal.json");
 
         var options = new JsonSerializerOptions { WriteIndented = true };
         options.Converters.Add(new CustomDateTimeOffsetConverter("yyyy-MM-ddTHH:mm:ssZ"));
