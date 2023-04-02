@@ -6,17 +6,48 @@ public class FacebookMapper : IEntryMapper<Post>
     {
         var entry = new Entry
         {
-            CreationDate = DateTimeOffset.FromUnixTimeSeconds(sourceItem.Timestamp)
+            CreationDate = BuildCreationDate(sourceItem),
+            ModifiedDate = BuildModifiedDate(sourceItem),
+            Text = BuildText(sourceItem)
         };
-
-        foreach (var postDataItem in sourceItem.Data)
-        {
-            if (!string.IsNullOrEmpty(postDataItem.Post))
-            {
-                entry.Text = postDataItem.Post;
-            }
-        }
 
         return entry;
     }
-}
+
+    public DateTimeOffset BuildCreationDate(Post sourceItem)
+    {
+        return DateTimeOffset.FromUnixTimeSeconds(sourceItem.Timestamp);
+    }
+
+    public DateTimeOffset BuildModifiedDate(Post sourceItem)
+    {
+        var updateTimestamp = sourceItem.Data?.FirstOrDefault(
+            x => x.UpdateTimestamp != null)?.UpdateTimestamp ?? sourceItem.Timestamp;
+
+        return DateTimeOffset.FromUnixTimeSeconds(updateTimestamp);
+    }
+
+    public string BuildText(Post sourceItem)
+    {
+        var paragraphs = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(sourceItem.Title))
+        {
+            paragraphs.Add(sourceItem.Title);
+        }
+
+        if (sourceItem.Data != null)
+        {
+            foreach (var postDataItem in sourceItem.Data)
+            {
+                if (!string.IsNullOrWhiteSpace(postDataItem.Post))
+                {
+                    paragraphs.Add(postDataItem.Post);
+                }
+            }
+        }
+
+        return string.Join("\n\n", paragraphs);
+        }
+    }
+    

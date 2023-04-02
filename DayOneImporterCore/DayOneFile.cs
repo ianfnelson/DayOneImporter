@@ -20,6 +20,9 @@ public class Entry
 {
     [JsonPropertyName("creationDate")]
     public DateTimeOffset CreationDate { get; set; }
+    
+    [JsonPropertyName("modifiedDate")]
+    public DateTimeOffset ModifiedDate { get; set; }
 
     [JsonPropertyName("timeZone")] 
     public string TimeZone { get; set; } = @"Europe/London";
