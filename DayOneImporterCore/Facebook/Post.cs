@@ -59,10 +59,10 @@ public class Place
 public class Coordinate
 {
     [JsonPropertyName("latitude")]
-    public float Latitude { get; set; }
+    public double Latitude { get; set; }
     
     [JsonPropertyName("longitude")]
-    public float Longitude { get; set; }
+    public double Longitude { get; set; }
 }
 
 public class ExternalContext

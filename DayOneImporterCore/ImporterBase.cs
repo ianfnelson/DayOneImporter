@@ -24,7 +24,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         _entryMapper = entryMapper;
     }
     
-    public virtual int BatchSize { get; } = 100;
+    public virtual int BatchSize { get; } = 1000;
     
     public abstract string SourceSystemName { get; }
     

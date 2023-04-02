@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace DayOneImporterCore.Facebook;
@@ -15,14 +16,13 @@ public class FacebookImporter : ImporterBase<Post>
     {
         using FileStream openStream = File.OpenRead("/Users/ian/dev/Facebook/posts/your_posts_1.json");
 
-        return JsonSerializer.Deserialize<List<Post>>(openStream);
+        var posts = JsonSerializer.Deserialize<List<Post>>(openStream);
+
+        return posts;
     }
 
     protected override IList<Post> FilterSourceItems(IList<Post> sourceItems)
     {
-        return sourceItems
-            .Where(x => x.Data != null)
-            .Where(x => x.Data.Any(y => !string.IsNullOrEmpty(y.Post)))
-            .ToList();
+        return sourceItems;
     }
 }

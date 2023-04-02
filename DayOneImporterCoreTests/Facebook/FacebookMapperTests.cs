@@ -73,6 +73,152 @@ public class FacebookMapperTests
         var expectedModifiedDate = new DateTime(2014, 3, 17, 08, 36, 20);
         actualModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
     }
+
+    [TestMethod]
+    public void BuildText_TitleOnly_TextIsTitle()
+    {
+        // Arrange
+        var sourceItem = new Post()
+        {
+            Timestamp = 1395045380L,
+            Title = "foo"
+        };
+        
+        // Act
+        var actualText = _sut.BuildText(sourceItem);
+
+        // Assert
+        actualText.Should().Be("foo");
+    }
+    
+    [TestMethod]
+    public void BuildText_PostOnly_TextIsTitle()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L,
+            Data = new List<PostDataItem>
+            {
+                new(){Post = "bar"}
+            }
+        };
+        
+        // Act
+        var actualText = _sut.BuildText(sourceItem);
+
+        // Assert
+        actualText.Should().Be("bar");
+    }
+    
+    [TestMethod]
+    public void BuildText_TitleAndPost_TextIsConcatenationOfTitleAndPost()
+    {
+        // Arrange
+        var sourceItem = new Post()
+        {
+            Timestamp = 1395045380L,
+            Title = "foo",
+            Data = new List<PostDataItem>
+            {
+                new(){Post = "bar"}
+            }
+        };
+        
+        // Act
+        var actualText = _sut.BuildText(sourceItem);
+
+        // Assert
+        actualText.Should().Be("foo\n\nbar");
+    }
+    
+    [TestMethod]
+    public void BuildText_TitleAndAttachments_TextIsConcatenationOfTitleAndAttachments()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L,
+            Title = "foo",
+            Attachments = new List<Attachment>
+            {
+                new(){
+                    Data = new List<AttachmentDataItem>
+                {
+                    new(){ExternalContext = new(){Url = "bar"}}
+                }}
+            }
+        };
+        
+        // Act
+        var actualText = _sut.BuildText(sourceItem);
+
+        // Assert
+        actualText.Should().Be("foo\n\nbar");
+    }
+    
+    [TestMethod]
+    public void BuildText_TitleAndText_TextIsConcatenationOfTitleAndTexts()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L,
+            Title = "foo",
+            Attachments = new List<Attachment>
+            {
+                new(){
+                    Data = new List<AttachmentDataItem>
+                    {
+                        new(){Text = "bar"},
+                        new(){Text = "wibble"}
+                    }}
+            }
+        };
+        
+        // Act
+        var actualText = _sut.BuildText(sourceItem);
+
+        // Assert
+        actualText.Should().Be("foo\n\nbar\n\nwibble");
+    }
+
+    [TestMethod]
+    public void BuildLocation_HasPlace_MapsPlaceToLocation()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L,
+            Title = "foo",
+            Attachments = new List<Attachment>
+            {
+                new(){
+                    Data = new List<AttachmentDataItem>
+                    {
+                        new(){Text = "bar"},
+                        new(){Place = new Place
+                            {
+                                Name = "Hull Dock",
+                                Coordinate = new Coordinate
+                                {
+                                    Latitude = 53.739455D,
+                                    Longitude = -0.27011454105377D
+                                }
+                            }
+                        }
+                    }}
+            }
+        };
+        
+        // Act
+        var location = _sut.BuildLocation(sourceItem);
+
+        // Assert
+        location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
+        location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
+        location.PlaceName.Should().Be("Hull Dock");
+    }
     
     [TestMethod]
     public void Map_01SimpleStatusUpdate()
@@ -107,6 +253,63 @@ public class FacebookMapperTests
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
         entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson updated his status.\n\nat home");
+    }
+    
+    [TestMethod]
+    public void Map_03WithUrl()
+    {
+        // Arrange
+        const string fileName = "03_withUrl.json";
+        
+        // Act
+        var entry = MapPostFromFile(fileName);
+        
+        // Assert
+        var expectedCreationDate = new DateTime(2007, 7, 21, 23, 6, 21);
+        entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
+        var expectedModifiedDate = new DateTime(2007, 7, 21, 23, 6, 21);
+        entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
+        entry.TimeZone.Should().Be(@"Europe/London");
+        entry.Text.Should().Be("Ian Nelson shared a link.\n\nhttp://del.icio.us/ianfnelson");
+    }
+    
+    [TestMethod]
+    public void Map_04WithText()
+    {
+        // Arrange
+        const string fileName = "04_withText.json";
+        
+        // Act
+        var entry = MapPostFromFile(fileName);
+        
+        // Assert
+        var expectedCreationDate = new DateTime(2013, 12, 20, 9, 31, 46);
+        entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
+        var expectedModifiedDate = new DateTime(2013, 12, 20, 9, 31, 46);
+        entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
+        entry.TimeZone.Should().Be(@"Europe/London");
+        entry.Text.Should().Be("Ian Nelson shared a link.\n\nJulie London\n\nI'd Like You For Christmas - Remastered\n\nChristmas Classics");
+    }
+    
+    [TestMethod]
+    public void Map_05WithPlace()
+    {
+        // Arrange
+        const string fileName = "05_withPlace.json";
+        
+        // Act
+        var entry = MapPostFromFile(fileName);
+        
+        // Assert
+        var expectedCreationDate = new DateTime(2011, 6, 12, 18, 40, 46);
+        entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
+        var expectedModifiedDate = new DateTime(2011, 6, 12, 18, 40, 46);
+        entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
+        entry.TimeZone.Should().Be(@"Europe/London");
+        entry.Text.Should().Be("Ian Nelson was with Jocelyn Nelson at Hull Dock.");
+        entry.Location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
+        entry.Location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
+        entry.Location.PlaceName.Should().Be("Hull Dock");
     }
 
     private Entry MapPostFromFile(string fileName)

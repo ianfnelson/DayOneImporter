@@ -30,6 +30,18 @@
       <Content Include="Facebook\02_withUpdateTimestamp.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="Facebook\03_withUrl.json" />
+      <Content Include="Facebook\03_withUrl.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Facebook\04_withText.json" />
+      <Content Include="Facebook\04_withText.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Facebook\05_withPlace.json" />
+      <Content Include="Facebook\05_withPlace.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

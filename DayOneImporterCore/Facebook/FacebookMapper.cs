@@ -8,7 +8,8 @@ public class FacebookMapper : IEntryMapper<Post>
         {
             CreationDate = BuildCreationDate(sourceItem),
             ModifiedDate = BuildModifiedDate(sourceItem),
-            Text = BuildText(sourceItem)
+            Text = BuildText(sourceItem),
+            Location = BuildLocation(sourceItem)
         };
 
         return entry;
@@ -36,6 +37,25 @@ public class FacebookMapper : IEntryMapper<Post>
             paragraphs.Add(sourceItem.Title);
         }
 
+        if (sourceItem.Attachments != null)
+        {
+            foreach (var attachment in sourceItem.Attachments)
+            {
+                if (attachment.Data != null)
+                {
+                    foreach (var attachmentDataItem in attachment.Data.Where(x => x.Text != null))
+                    {
+                        paragraphs.Add(attachmentDataItem.Text);
+                    }
+
+                    foreach (var attachmentDataItem in attachment.Data.Where(x => x.ExternalContext != null))
+                    {
+                        paragraphs.Add(attachmentDataItem.ExternalContext.Url);
+                    }
+                }
+            }
+        }
+
         if (sourceItem.Data != null)
         {
             foreach (var postDataItem in sourceItem.Data)
@@ -48,6 +68,31 @@ public class FacebookMapper : IEntryMapper<Post>
         }
 
         return string.Join("\n\n", paragraphs);
-        }
     }
-    
+
+    public Location BuildLocation(Post sourceItem)
+    {
+        var place = sourceItem.Attachments?
+            .SelectMany(x => x.Data)
+            .FirstOrDefault(x => x.Place != null)
+            ?.Place;
+
+        if (place == null)
+        {
+            return null;
+        }
+
+        var location = new Location
+        {
+            PlaceName = place.Name
+        };
+
+        if (place.Coordinate != null)
+        {
+            location.Latitude = place.Coordinate.Latitude;
+            location.Longitude = place.Coordinate.Longitude;
+        }
+
+        return location;
+    }
+}
