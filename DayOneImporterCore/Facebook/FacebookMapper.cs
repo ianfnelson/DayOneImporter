@@ -67,7 +67,7 @@ public class FacebookMapper : IEntryMapper<Post>
             }
         }
 
-        return string.Join("\n\n", paragraphs);
+        return string.Join("\n\n", paragraphs).FixFacebookEncoding();
     }
 
     public Location BuildLocation(Post sourceItem)

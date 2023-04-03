@@ -42,6 +42,10 @@
       <Content Include="Facebook\05_withPlace.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="Facebook\06_withWeirdFacebookEncoding.json" />
+      <Content Include="Facebook\06_withWeirdFacebookEncoding.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

@@ -184,6 +184,26 @@ public class FacebookMapperTests
     }
 
     [TestMethod]
+    public void BuildText_WithWeirdFacebookEncoding_WeirdEncodingIsFixed()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L,
+            Data = new List<PostDataItem>
+            {
+                new(){Post = "Just when I thought I\u00e2\u0080\u0099d seen it all, I encounter an ASP.NET web site project containing a mixture of C# and VB pages! It\u00e2\u0080\u0099s unnatural!"}
+            }
+        };
+        
+        // Act
+        var actualText = _sut.BuildText(sourceItem);
+
+        // Assert
+        actualText.Should().Be("Just when I thought I’d seen it all, I encounter an ASP.NET web site project containing a mixture of C# and VB pages! It’s unnatural!");
+    }
+
+    [TestMethod]
     public void BuildLocation_HasPlace_MapsPlaceToLocation()
     {
         // Arrange
@@ -310,6 +330,24 @@ public class FacebookMapperTests
         entry.Location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
         entry.Location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
         entry.Location.PlaceName.Should().Be("Hull Dock");
+    }
+    
+    [TestMethod]
+    public void Map_06WithWeirdFacebookEncoding()
+    {
+        // Arrange
+        const string fileName = "06_withWeirdFacebookEncoding.json";
+        
+        // Act
+        var entry = MapPostFromFile(fileName);
+        
+        // Assert
+        var expectedCreationDate = new DateTime(2008, 11, 20, 11, 59, 11);
+        entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
+        var expectedModifiedDate = new DateTime(2008, 11, 20, 11, 59, 11);
+        entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
+        entry.TimeZone.Should().Be(@"Europe/London");
+        entry.Text.Should().Be("Just when I thought I’d seen it all, I encounter an ASP.NET web site project containing a mixture of C# and VB pages! It’s unnatural!");
     }
 
     private Entry MapPostFromFile(string fileName)
