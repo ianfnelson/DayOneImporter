@@ -9,7 +9,8 @@ public class FacebookMapper : IEntryMapper<Post>
             CreationDate = BuildCreationDate(sourceItem),
             ModifiedDate = BuildModifiedDate(sourceItem),
             Text = BuildText(sourceItem),
-            Location = BuildLocation(sourceItem)
+            Location = BuildLocation(sourceItem),
+            Tags = BuildTags(sourceItem)
         };
 
         return entry;
@@ -84,7 +85,7 @@ public class FacebookMapper : IEntryMapper<Post>
 
         var location = new Location
         {
-            PlaceName = place.Name
+            PlaceName = place.Name.FixFacebookEncoding()
         };
 
         if (place.Coordinate != null)
@@ -94,5 +95,14 @@ public class FacebookMapper : IEntryMapper<Post>
         }
 
         return location;
+    }
+
+    public List<string> BuildTags(Post sourceItem)
+    {
+        var tags = new List<string>();
+        
+        tags.AddRange(sourceItem.Tags?.Select(x => x.Name.FixFacebookEncoding()) ?? Array.Empty<string>());
+
+        return tags;
     }
 }

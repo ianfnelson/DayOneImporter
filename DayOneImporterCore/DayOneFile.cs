@@ -31,6 +31,9 @@ public class Entry
     public Location Location { get; set; }
     
     // TODO - photos
+
+    [JsonPropertyName("tags")] 
+    public List<string> Tags { get; set; } = new List<string>();
     
     [JsonPropertyName("text")]
     public string Text { get; set; }

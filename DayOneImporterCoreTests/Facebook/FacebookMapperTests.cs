@@ -239,6 +239,51 @@ public class FacebookMapperTests
         location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
         location.PlaceName.Should().Be("Hull Dock");
     }
+
+    [TestMethod]
+    public void BuildTags_HasNullTags_MapsTagsToEmptyList()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L, 
+            Data = new List<PostDataItem>
+            {
+                new(){Post = "foo"}
+            }
+        };
+
+        // Act
+        var actualTags = _sut.BuildTags(sourceItem);
+
+        // Assert
+        actualTags.Should().BeEmpty();
+    }
+    
+    [TestMethod]
+    public void BuildTags_HasTags_MapsTags()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L, 
+            Data = new List<PostDataItem>
+            {
+                new(){Post = "foo"}
+            },
+            Tags = new List<Tag>()
+            {
+                new(){Name = "Jocelyn Nelson"},
+                new(){Name = "Isla Nelson"}
+            }
+        };
+
+        // Act
+        var actualTags = _sut.BuildTags(sourceItem);
+
+        // Assert
+        actualTags.Should().BeEquivalentTo("Jocelyn Nelson", "Isla Nelson");
+    }
     
     [TestMethod]
     public void Map_01SimpleStatusUpdate()
@@ -348,6 +393,25 @@ public class FacebookMapperTests
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
         entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Just when I thought I’d seen it all, I encounter an ASP.NET web site project containing a mixture of C# and VB pages! It’s unnatural!");
+    }
+    
+    [TestMethod]
+    public void Map_07WithTags()
+    {
+        // Arrange
+        const string fileName = "07_withTags.json";
+        
+        // Act
+        var entry = MapPostFromFile(fileName);
+        
+        // Assert
+        var expectedCreationDate = new DateTime(2017, 2, 15, 12, 33, 9);
+        entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
+        var expectedModifiedDate = new DateTime(2017, 2, 15, 12, 33, 9);
+        entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
+        entry.TimeZone.Should().Be(@"Europe/London");
+        entry.Tags.Should()
+            .BeEquivalentTo("Colin Lowe", "Sion Harrison", "Peter Windridge-France", "Rosie Middleton Jones");
     }
 
     private Entry MapPostFromFile(string fileName)
