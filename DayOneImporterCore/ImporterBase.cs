@@ -57,7 +57,15 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
     {
         foreach (var sourceItem in sourceItems)
         {
-            yield return _entryMapper.Map(sourceItem, MediaFolderRoot);
+            var entry = _entryMapper.Map(sourceItem, MediaFolderRoot);
+
+            if (string.IsNullOrEmpty(entry.Text) &&
+                (entry.Photos == null || entry.Photos.Count == 0))
+            {
+                continue;
+            }
+
+            yield return entry;
         }
     }
 
