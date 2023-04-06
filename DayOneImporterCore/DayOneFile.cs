@@ -29,14 +29,27 @@ public class Entry
     
     [JsonPropertyName("location")]
     public Location Location { get; set; }
-    
-    // TODO - photos
+
+    [JsonPropertyName("photos")] 
+    public List<Photo> Photos { get; set; } = new List<Photo>();
 
     [JsonPropertyName("tags")] 
     public List<string> Tags { get; set; } = new List<string>();
     
     [JsonPropertyName("text")]
     public string Text { get; set; }
+}
+
+public class Photo
+{
+    [JsonPropertyName("md5")]
+    public string Md5 { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = "jpeg";
+
+    [JsonIgnore]
+    public string SourceLocation { get; set; }
 }
 
 public class Location

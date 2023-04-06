@@ -286,6 +286,62 @@ public class FacebookMapperTests
     }
     
     [TestMethod]
+    public void BuildPhotos_HasPhotos_MapsPhotos()
+    {
+        // Arrange
+        var sourceItem = new Post
+        {
+            Timestamp = 1395045380L, 
+            Data = new List<PostDataItem>
+            {
+                new(){Post = "foo"}
+            },
+            Attachments = new List<Attachment>()
+            {
+                new Attachment(){ Data = new List<AttachmentDataItem>()
+                {
+                    new AttachmentDataItem(){ Media = new Media()
+                    {
+                        Uri = "one.jpg"
+                    }},
+                    new AttachmentDataItem(){Media = new Media()
+                    {
+                        Uri="two.jpg"
+                    }},
+                    new AttachmentDataItem(){Media = new Media()
+                    {
+                        Uri="three.jpg"
+                    }},
+                }}
+            }
+        };
+
+        // Act
+        var actualPhotos = _sut.BuildPhotos(sourceItem, "FaceBook/photos");
+
+        // Assert
+        var expectedPhotos = new List<Photo>
+        {
+            new()
+            {
+                SourceLocation = "one.jpg",
+                Md5 = "d00611d46ab66a108b1174a476ed36d4"
+            },
+            new() 
+            {
+                SourceLocation = "two.jpg",
+                Md5 = "99b7634cc849e1510ce4ad7182c890eb"
+            },
+            new()
+            {
+                SourceLocation = "three.jpg",
+                Md5 = "631b9ad973e16cfc7b74b3bb907e2ec9"
+            }
+        };
+        actualPhotos.Should().BeEquivalentTo(expectedPhotos);
+    }
+    
+    [TestMethod]
     public void Map_01SimpleStatusUpdate()
     {
         // Arrange
@@ -413,13 +469,49 @@ public class FacebookMapperTests
         entry.Tags.Should()
             .BeEquivalentTo("Colin Lowe", "Sion Harrison", "Peter Windridge-France", "Rosie Middleton Jones");
     }
+    
+    [TestMethod]
+    public void Map_08WithPhotos()
+    {
+        // Arrange
+        const string fileName = "08_withPhotos.json";
+        
+        // Act
+        var entry = MapPostFromFile(fileName);
+        
+        // Assert
+        var expectedCreationDate = new DateTime(2018, 10, 14, 11, 40, 22);
+        entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
+        var expectedModifiedDate = new DateTime(2018, 10, 14, 11, 40, 22);
+        entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
+        entry.TimeZone.Should().Be(@"Europe/London");
+        var expectedPhotos = new List<Photo>
+        {
+            new()
+            {
+                SourceLocation = "one.jpg",
+                Md5 = "d00611d46ab66a108b1174a476ed36d4"
+            },
+            new() 
+            {
+                SourceLocation = "two.jpg",
+                Md5 = "99b7634cc849e1510ce4ad7182c890eb"
+            },
+            new()
+            {
+                SourceLocation = "three.jpg",
+                Md5 = "631b9ad973e16cfc7b74b3bb907e2ec9"
+            }
+        };
+        entry.Photos.Should().BeEquivalentTo(expectedPhotos);
+    }
 
     private Entry MapPostFromFile(string fileName)
     {
         using FileStream openStream = File.OpenRead("Facebook/" + fileName);
         var post = JsonSerializer.Deserialize<Post>(openStream);
 
-        var entry = _sut.Map(post);
+        var entry = _sut.Map(post, "Facebook/photos");
 
         return entry;
     }

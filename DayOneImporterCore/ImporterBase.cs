@@ -24,9 +24,11 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         _entryMapper = entryMapper;
     }
     
-    public virtual int BatchSize { get; } = 1000;
+    public virtual int BatchSize { get; } = 200;
     
     public abstract string SourceSystemName { get; }
+    
+    public abstract string MediaFolderRoot { get; }
     
     public void Import()
     {
@@ -45,10 +47,6 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
             Logger.LogInformation("Done batch " + batchNumber);
             batchNumber++;
         }
-        
-        var mappedEntries = MapEntries(sourceItems);
-        Logger.LogInformation("Entries mapped");
-
     }
 
     protected abstract IList<TSourceItem> LoadSourceItems();
@@ -59,7 +57,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
     {
         foreach (var sourceItem in sourceItems)
         {
-            yield return _entryMapper.Map(sourceItem);
+            yield return _entryMapper.Map(sourceItem, MediaFolderRoot);
         }
     }
 
@@ -68,11 +66,23 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         var batchFolderName = "/Users/ian/dev/DayOneOutput/" + SourceSystemName + "/" + batchNumber;
         
         Directory.CreateDirectory(batchFolderName);
-        Directory.CreateDirectory(batchFolderName + "/photos");
-
         WriteOutputFile(mappedEntries, batchFolderName);
         
+        CopyOutputMedia(mappedEntries, batchFolderName);
+        
         ZipFile.CreateFromDirectory(batchFolderName, "/Users/ian/dev/DayOneOutput/" + SourceSystemName + "/" + batchNumber + ".zip");
+    }
+
+    private void CopyOutputMedia(IList<Entry> mappedEntries, string batchFolderName)
+    {
+        var mediaFolderName = batchFolderName + "/photos";
+        
+        Directory.CreateDirectory(mediaFolderName);
+
+        foreach (var photo in mappedEntries.SelectMany(x => x.Photos))
+        {
+            File.Copy(MediaFolderRoot + photo.SourceLocation, mediaFolderName + "/" + photo.Md5 + ".jpg", true);
+        }
     }
     
     private void WriteOutputFile(IList<Entry> mappedEntries, string batchFolderName)
@@ -115,5 +125,5 @@ public interface ISourceItem
 
 public interface IEntryMapper<TSourceItem> where TSourceItem : ISourceItem
 {
-    Entry Map(TSourceItem sourceItem);
+    Entry Map(TSourceItem sourceItem, string mediaFolderRoot);
 }

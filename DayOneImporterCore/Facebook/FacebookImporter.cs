@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace DayOneImporterCore.Facebook;
@@ -11,6 +10,8 @@ public class FacebookImporter : ImporterBase<Post>
     }
 
     public override string SourceSystemName => "Facebook";
+
+    public override string MediaFolderRoot => "/Users/ian/dev/Facebook/";
 
     protected override IList<Post> LoadSourceItems()
     {

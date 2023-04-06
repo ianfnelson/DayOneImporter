@@ -1,8 +1,10 @@
+using System.Security.Cryptography;
+
 namespace DayOneImporterCore.Facebook;
 
 public class FacebookMapper : IEntryMapper<Post>
 {
-    public Entry Map(Post sourceItem)
+    public Entry Map(Post sourceItem, string mediaFolderRoot)
     {
         var entry = new Entry
         {
@@ -10,7 +12,8 @@ public class FacebookMapper : IEntryMapper<Post>
             ModifiedDate = BuildModifiedDate(sourceItem),
             Text = BuildText(sourceItem),
             Location = BuildLocation(sourceItem),
-            Tags = BuildTags(sourceItem)
+            Tags = BuildTags(sourceItem),
+            Photos = BuildPhotos(sourceItem, mediaFolderRoot)
         };
 
         return entry;
@@ -104,5 +107,40 @@ public class FacebookMapper : IEntryMapper<Post>
         tags.AddRange(sourceItem.Tags?.Select(x => x.Name.FixFacebookEncoding()) ?? Array.Empty<string>());
 
         return tags;
+    }
+
+    public List<Photo> BuildPhotos(Post sourceItem, string mediaFolderRoot)
+    {
+        var photos = new List<Photo>();
+
+        if (sourceItem.Attachments != null)
+        {
+            foreach (var attachment in sourceItem.Attachments)
+            {
+                if (attachment.Data != null)
+                {
+                    foreach (var attachmentDataItem in attachment.Data.Where(x => x.Media != null))
+                    {
+                        string md5Hash;
+                        using (var md5 = MD5.Create())
+                        {
+                            using (var stream = File.OpenRead(mediaFolderRoot + "/" + attachmentDataItem.Media.Uri))
+                            {
+                                var hash = md5.ComputeHash(stream);
+                                md5Hash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                            }
+                        }
+                        
+                        photos.Add(new Photo
+                        {
+                            Md5 = md5Hash,
+                            SourceLocation = attachmentDataItem.Media.Uri
+                        });
+                    }
+                }
+            }
+        }
+        
+        return photos;
     }
 }
