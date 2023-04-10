@@ -82,13 +82,22 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
 
     private void CopyOutputMedia(IList<Entry> mappedEntries, string batchFolderName)
     {
-        var mediaFolderName = batchFolderName + "/photos";
+        var photoFolderName = batchFolderName + "/photos";
         
-        Directory.CreateDirectory(mediaFolderName);
+        Directory.CreateDirectory(photoFolderName);
 
         foreach (var photo in mappedEntries.SelectMany(x => x.Photos))
         {
-            File.Copy(MediaFolderRoot + photo.SourceLocation, mediaFolderName + "/" + photo.Md5 + ".jpg", true);
+            File.Copy(MediaFolderRoot + photo.SourceLocation, photoFolderName + "/" + photo.Md5 + photo.SourceLocation.Substring(photo.SourceLocation.LastIndexOf(".")), true);
+        }
+        
+        var videoFolderName = batchFolderName + "/videos";
+        
+        Directory.CreateDirectory(videoFolderName);
+
+        foreach (var video in mappedEntries.SelectMany(x => x.Videos))
+        {
+            File.Copy(MediaFolderRoot + video.SourceLocation, videoFolderName + "/" + video.Md5 + video.SourceLocation.Substring(video.SourceLocation.LastIndexOf(".")), true);
         }
     }
     

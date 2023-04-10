@@ -95,11 +95,19 @@ public class TwitterMapper : IEntryMapper<Tweet>
     {
         var sb = new StringBuilder(sourceItem.FullText);
 
-        if (sourceItem.Entities != null && sourceItem.Entities.Urls.Any())
+        if (sourceItem.Entities?.Urls != null && sourceItem.Entities.Urls.Any())
         {
             foreach (var url in sourceItem.Entities.Urls)
             {
                 sb = sb.Replace(url.IncludedUrl, url.ExpandedUrl);
+            }
+        }
+
+        if (sourceItem.ExtendedEntities?.Media != null && sourceItem.ExtendedEntities.Media.Any())
+        {
+            foreach (var media in sourceItem.ExtendedEntities.Media)
+            {
+                sb = sb.Replace(media.Url, string.Empty);
             }
         }
 
