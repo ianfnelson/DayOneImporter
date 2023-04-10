@@ -12,7 +12,7 @@
 
     <ItemGroup>
       <Folder Include="Facebook\photos" />
-      <Folder Include="Twitter" />
+      <Folder Include="Twitter\media" />
     </ItemGroup>
 
     <ItemGroup>
@@ -65,6 +65,11 @@
       </Content>
       <None Remove="Facebook\photos\two.jpg" />
       <Content Include="Facebook\photos\two.jpg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Twitter\media\01_simple.json" />
+      <None Remove="Twitter\01_simple.json" />
+      <Content Include="Twitter\01_simple.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
