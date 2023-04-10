@@ -109,9 +109,9 @@ public class FacebookMapper : IEntryMapper<Post>
         return tags;
     }
 
-    public List<Photo> BuildPhotos(Post sourceItem, string mediaFolderRoot)
+    public List<DayOneImporterCore.Media> BuildPhotos(Post sourceItem, string mediaFolderRoot)
     {
-        var photos = new List<Photo>();
+        var photos = new List<DayOneImporterCore.Media>();
 
         if (sourceItem.Attachments != null)
         {
@@ -119,22 +119,23 @@ public class FacebookMapper : IEntryMapper<Post>
             {
                 if (attachment.Data != null)
                 {
-                    foreach (var attachmentDataItem in attachment.Data.Where(x => x.Media != null))
+                    foreach (var attachmentDataItem in attachment.Data.Where(x => x.FbMedia != null))
                     {
                         string md5Hash;
                         using (var md5 = MD5.Create())
                         {
-                            using (var stream = File.OpenRead(mediaFolderRoot + "/" + attachmentDataItem.Media.Uri))
+                            using (var stream = File.OpenRead(mediaFolderRoot + "/" + attachmentDataItem.FbMedia.Uri))
                             {
                                 var hash = md5.ComputeHash(stream);
                                 md5Hash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                             }
                         }
                         
-                        photos.Add(new Photo
+                        photos.Add(new DayOneImporterCore.Media
                         {
                             Md5 = md5Hash,
-                            SourceLocation = attachmentDataItem.Media.Uri
+                            SourceLocation = attachmentDataItem.FbMedia.Uri,
+                            Type = "jpeg"
                         });
                     }
                 }

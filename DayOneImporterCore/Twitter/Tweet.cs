@@ -27,12 +27,33 @@ public class Tweet : ISourceItem
     
     [JsonPropertyName("entities")]
     public Entities Entities { get; set; }
+    
+    [JsonPropertyName("extended_entities")]
+    public ExtendedEntities ExtendedEntities { get; set; }
 }
 
 public class Entities
 {
     [JsonPropertyName("urls")]
     public List<Url> Urls { get; set; }
+}
+
+public class ExtendedEntities
+{
+    [JsonPropertyName("media")]
+    public List<TwitterMedia> Media { get; set; }
+}
+
+public class TwitterMedia
+{
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
+    
+    [JsonPropertyName("media_url")]
+    public string MediaUrl { get; set; }
+
+    [JsonPropertyName("video_info")]
+    public object VideoInfo { get; set; }
 }
 
 public class Url

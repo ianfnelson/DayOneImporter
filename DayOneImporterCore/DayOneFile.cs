@@ -31,7 +31,10 @@ public class Entry
     public Location Location { get; set; }
 
     [JsonPropertyName("photos")] 
-    public List<Photo> Photos { get; set; } = new List<Photo>();
+    public List<Media> Photos { get; set; } = new List<Media>();
+
+    [JsonPropertyName("videos")] 
+    public List<Media> Videos { get; set; } = new List<Media>();
 
     [JsonPropertyName("tags")] 
     public List<string> Tags { get; set; } = new List<string>();
@@ -40,7 +43,7 @@ public class Entry
     public string Text { get; set; }
 }
 
-public class Photo
+public class Media
 {
     [JsonPropertyName("md5")]
     public string Md5 { get; set; }

@@ -300,15 +300,15 @@ public class FacebookMapperTests
             {
                 new Attachment(){ Data = new List<AttachmentDataItem>()
                 {
-                    new AttachmentDataItem(){ Media = new Media()
+                    new AttachmentDataItem(){ FbMedia = new FbMedia()
                     {
                         Uri = "one.jpg"
                     }},
-                    new AttachmentDataItem(){Media = new Media()
+                    new AttachmentDataItem(){FbMedia = new FbMedia()
                     {
                         Uri="two.jpg"
                     }},
-                    new AttachmentDataItem(){Media = new Media()
+                    new AttachmentDataItem(){FbMedia = new FbMedia()
                     {
                         Uri="three.jpg"
                     }},
@@ -320,7 +320,7 @@ public class FacebookMapperTests
         var actualPhotos = _sut.BuildPhotos(sourceItem, "FaceBook/photos");
 
         // Assert
-        var expectedPhotos = new List<Photo>
+        var expectedPhotos = new List<Media>
         {
             new()
             {
@@ -485,7 +485,7 @@ public class FacebookMapperTests
         var expectedModifiedDate = new DateTime(2018, 10, 14, 11, 40, 22);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
         entry.TimeZone.Should().Be(@"Europe/London");
-        var expectedPhotos = new List<Photo>
+        var expectedPhotos = new List<Media>
         {
             new()
             {

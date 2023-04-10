@@ -29,7 +29,7 @@ public class Attachment
 public class AttachmentDataItem
 {
     [JsonPropertyName("media")]
-    public Media Media { get; set; }
+    public FbMedia FbMedia { get; set; }
     
     [JsonPropertyName("external_context")]
     public ExternalContext ExternalContext { get; set; }
@@ -71,7 +71,7 @@ public class ExternalContext
     public string Url { get; set; }
 }
 
-public class Media
+public class FbMedia
 {
     [JsonPropertyName("uri")]
     public string Uri { get; set; }

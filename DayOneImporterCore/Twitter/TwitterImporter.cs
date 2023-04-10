@@ -12,7 +12,7 @@ public class TwitterImporter : ImporterBase<Tweet>
     public override int BatchSize => 1000;
 
     public override string SourceSystemName => "Twitter";
-    public override string MediaFolderRoot => "/Users/ian/dev/Twitter/";
+    public override string MediaFolderRoot => "/Users/ian/dev/Twitter/data/tweets_media/";
     protected override IList<Tweet> LoadSourceItems()
     {
         using FileStream openStream = File.OpenRead("/Users/ian/dev/Twitter/data/tweets.json");
@@ -24,6 +24,6 @@ public class TwitterImporter : ImporterBase<Tweet>
 
     protected override IList<Tweet> FilterSourceItems(IList<Tweet> sourceItems)
     {
-        return sourceItems;
+        return sourceItems.Where(x => !x.FullText.StartsWith("RT ")).ToList();
     }
 }
