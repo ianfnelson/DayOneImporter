@@ -18,8 +18,8 @@ containerBuilder.RegisterType<TwitterMapper>().As<IEntryMapper<Tweet>>();
 containerBuilder.Populate(serviceCollection);
 var container = containerBuilder.Build();
 
-// var facebookImporter = container.Resolve<FacebookImporter>();
-// facebookImporter.Import();
+var facebookImporter = container.Resolve<FacebookImporter>();
+facebookImporter.Import();
 
 var twitterImporter = container.Resolve<TwitterImporter>();
 twitterImporter.Import();
