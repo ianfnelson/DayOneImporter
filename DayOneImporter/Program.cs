@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Globalization;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DayOneImporterCore;
 using DayOneImporterCore.Facebook;
@@ -18,8 +19,23 @@ containerBuilder.RegisterType<TwitterMapper>().As<IEntryMapper<Tweet>>();
 containerBuilder.Populate(serviceCollection);
 var container = containerBuilder.Build();
 
+var startDate = ArgsParser.GetStartDate(args);
+
 var facebookImporter = container.Resolve<FacebookImporter>();
-facebookImporter.Import();
+facebookImporter.Import(startDate);
 
 var twitterImporter = container.Resolve<TwitterImporter>();
-twitterImporter.Import();
+twitterImporter.Import(startDate);
+
+public static class ArgsParser
+{
+    public static DateTimeOffset GetStartDate(string[] args)
+    {
+        if (args.Length == 0)
+        {
+            return DateTimeOffset.MinValue;
+        }
+
+        return DateTimeOffset.ParseExact(args[0], "yyyyMMdd", CultureInfo.InvariantCulture);
+    } 
+}

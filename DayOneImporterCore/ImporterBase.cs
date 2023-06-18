@@ -8,7 +8,7 @@ namespace DayOneImporterCore;
 
 public interface IImporter
 {
-    void Import();
+    void Import(DateTimeOffset startDate);
 }
 
 public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : ISourceItem
@@ -29,7 +29,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
     
     public abstract string MediaFolderRoot { get; }
     
-    public void Import()
+    public void Import(DateTimeOffset startDate)
     {
         Logger.LogInformation("Beginning " + SourceSystemName + " import");
         var sourceItems = LoadSourceItems();
@@ -39,7 +39,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         Logger.LogInformation("Following filtering, " + sourceItems.Count + " source items remain");
 
         int batchNumber = 1;
-        foreach (var batch in MapEntries(sourceItems).Batch(BatchSize))
+        foreach (var batch in MapEntries(sourceItems, startDate).Batch(BatchSize))
         {
             var batchList = batch.ToList();
             BuildOutputZip(batchList, batchNumber);
@@ -52,7 +52,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
 
     protected abstract IList<TSourceItem> FilterSourceItems(IList<TSourceItem> sourceItems);
 
-    protected virtual IEnumerable<Entry> MapEntries(IEnumerable<TSourceItem> sourceItems)
+    protected virtual IEnumerable<Entry> MapEntries(IEnumerable<TSourceItem> sourceItems, DateTimeOffset startDate)
     {
         foreach (var sourceItem in sourceItems)
         {
@@ -60,6 +60,11 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
 
             if (string.IsNullOrEmpty(entry.Text) &&
                 (entry.Photos == null || entry.Photos.Count == 0))
+            {
+                continue;
+            }
+
+            if (entry.CreationDate < startDate)
             {
                 continue;
             }
