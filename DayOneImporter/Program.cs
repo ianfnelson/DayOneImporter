@@ -4,6 +4,7 @@ using Autofac.Extensions.DependencyInjection;
 using DayOneImporterCore;
 using DayOneImporterCore.Facebook;
 using DayOneImporterCore.Twitter;
+using DayOneImporterCore.Wordpress;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -14,18 +15,23 @@ var containerBuilder = new ContainerBuilder();
 
 containerBuilder.RegisterType<FacebookImporter>();
 containerBuilder.RegisterType<TwitterImporter>();
+containerBuilder.RegisterType<WordpressImporter>();
 containerBuilder.RegisterType<FacebookMapper>().As<IEntryMapper<Post>>();
 containerBuilder.RegisterType<TwitterMapper>().As<IEntryMapper<Tweet>>();
+containerBuilder.RegisterType<WordpressMapper>().As<IEntryMapper<Item>>();
 containerBuilder.Populate(serviceCollection);
 var container = containerBuilder.Build();
 
 var startDate = ArgsParser.GetStartDate(args);
 
-var facebookImporter = container.Resolve<FacebookImporter>();
-facebookImporter.Import(startDate);
+// var facebookImporter = container.Resolve<FacebookImporter>();
+// facebookImporter.Import(startDate);
+//
+// var twitterImporter = container.Resolve<TwitterImporter>();
+// twitterImporter.Import(startDate);
 
-var twitterImporter = container.Resolve<TwitterImporter>();
-twitterImporter.Import(startDate);
+var wordPressImporter = container.Resolve<WordpressImporter>();
+wordPressImporter.Import(startDate);
 
 public static class ArgsParser
 {
