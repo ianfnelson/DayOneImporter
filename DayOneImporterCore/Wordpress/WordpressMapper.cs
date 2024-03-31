@@ -1,3 +1,7 @@
+using System.Globalization;
+using System.Text;
+using Microsoft.Extensions.Primitives;
+
 namespace DayOneImporterCore.Wordpress;
 
 public class WordpressMapper : IEntryMapper<Item>
@@ -16,16 +20,29 @@ public class WordpressMapper : IEntryMapper<Item>
 
     private static string BuildText(Item sourceItem)
     {
-        return sourceItem.Title;
+        var sb = new StringBuilder();
+
+        sb.Append(sourceItem.Title);
+        sb.Append("\n\n");
+        sb.Append(sourceItem.Content);
+
+        return sb.ToString();
     }
 
-    private DateTimeOffset BuildModifiedDate(Item sourceItem)
+    private static DateTimeOffset BuildModifiedDate(Item sourceItem)
     {
-        return DateTimeOffset.Now;
+        return BuildDate(sourceItem.PostModifiedGmt);
     }
 
-    private DateTimeOffset BuildCreationDate(Item sourceItem)
+    private static DateTimeOffset BuildCreationDate(Item sourceItem)
     {
-        return DateTimeOffset.Now;
+        return BuildDate(sourceItem.PostDateGmt);
+    }
+
+    private static DateTimeOffset BuildDate(string sourceDate)
+    {
+        var date = DateTime.ParseExact(sourceDate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+
+        return new DateTimeOffset(date);
     }
 }

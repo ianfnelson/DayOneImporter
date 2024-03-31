@@ -14,7 +14,7 @@ public class WordpressImporter : ImporterBase<Item>
     protected override IList<Item> LoadSourceItems()
     {
         using var openStream = File.OpenRead("/Users/ian/dev/WordPress/wordpress.xml");
-
+        
         var ser = new XmlSerializer(typeof(Rss));
 
         var rss = (Rss)ser.Deserialize(openStream);
