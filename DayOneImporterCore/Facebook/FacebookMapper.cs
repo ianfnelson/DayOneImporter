@@ -19,12 +19,12 @@ public class FacebookMapper : IEntryMapper<Post>
         return entry;
     }
 
-    public DateTimeOffset BuildCreationDate(Post sourceItem)
+    public static DateTimeOffset BuildCreationDate(Post sourceItem)
     {
         return DateTimeOffset.FromUnixTimeSeconds(sourceItem.Timestamp);
     }
 
-    public DateTimeOffset BuildModifiedDate(Post sourceItem)
+    public static DateTimeOffset BuildModifiedDate(Post sourceItem)
     {
         var updateTimestamp = sourceItem.Data?.FirstOrDefault(
             x => x.UpdateTimestamp != null)?.UpdateTimestamp ?? sourceItem.Timestamp;
@@ -109,9 +109,9 @@ public class FacebookMapper : IEntryMapper<Post>
         return tags;
     }
 
-    public List<DayOneImporterCore.Media> BuildPhotos(Post sourceItem, string mediaFolderRoot)
+    public static List<Media> BuildPhotos(Post sourceItem, string mediaFolderRoot)
     {
-        var photos = new List<DayOneImporterCore.Media>();
+        var photos = new List<Media>();
 
         if (sourceItem.Attachments != null)
         {
@@ -131,7 +131,7 @@ public class FacebookMapper : IEntryMapper<Post>
                             }
                         }
                         
-                        photos.Add(new DayOneImporterCore.Media
+                        photos.Add(new Media
                         {
                             Md5 = md5Hash,
                             SourceLocation = attachmentDataItem.FbMedia.Uri,

@@ -10,7 +10,7 @@ public class WordpressImporter : ImporterBase<Item>
     }
 
     public override string SourceSystemName => "WordPress";
-    public override string MediaFolderRoot => "/Users/ian/dev/WordPress/";
+    public override string MediaFolderRoot => "/Users/ian/dev/WordPress/media/";
     protected override IList<Item> LoadSourceItems()
     {
         using var openStream = File.OpenRead("/Users/ian/dev/WordPress/wordpress.xml");

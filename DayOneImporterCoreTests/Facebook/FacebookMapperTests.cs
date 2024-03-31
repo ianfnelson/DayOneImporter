@@ -24,7 +24,7 @@ public class FacebookMapperTests
         var sourceItem = new Post { Timestamp = 1394389959L };
 
         // Act
-        var actualCreationDate = _sut.BuildCreationDate(sourceItem);
+        var actualCreationDate = FacebookMapper.BuildCreationDate(sourceItem);
 
         // Assert
         var expectedCreationDate = new DateTime(2014, 3, 9, 18, 32, 39);
@@ -46,7 +46,7 @@ public class FacebookMapperTests
         };
 
         // Act
-        var actualModifiedDate = _sut.BuildModifiedDate(sourceItem);
+        var actualModifiedDate = FacebookMapper.BuildModifiedDate(sourceItem);
 
         // Assert
         var expectedModifiedDate = new DateTime(2014, 3, 17, 08, 44, 53);
@@ -67,7 +67,7 @@ public class FacebookMapperTests
         };
 
         // Act
-        var actualModifiedDate = _sut.BuildModifiedDate(sourceItem);
+        var actualModifiedDate = FacebookMapper.BuildModifiedDate(sourceItem);
 
         // Assert
         var expectedModifiedDate = new DateTime(2014, 3, 17, 08, 36, 20);
@@ -317,7 +317,7 @@ public class FacebookMapperTests
         };
 
         // Act
-        var actualPhotos = _sut.BuildPhotos(sourceItem, "FaceBook/photos");
+        var actualPhotos = FacebookMapper.BuildPhotos(sourceItem, "FaceBook/photos");
 
         // Assert
         var expectedPhotos = new List<Media>
