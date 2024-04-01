@@ -18,6 +18,7 @@ public class WordpressMapper : IEntryMapper<Item>
         {
             CreationDate = BuildCreationDate(sourceItem),
             ModifiedDate = BuildModifiedDate(sourceItem),
+            Tags = BuildTags(sourceItem),
             Text = text,
             Photos = photos
         };
@@ -92,7 +93,8 @@ public class WordpressMapper : IEntryMapper<Item>
             string md5OfFile = GetMd5OfFile(localFile);
             
             string type;
-            if (localFile.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+            if (localFile.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                localFile.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
             {
                 type = "jpeg";
             }
@@ -147,7 +149,16 @@ public class WordpressMapper : IEntryMapper<Item>
 
         foreach (Match match in urls)
         {
-            yield return match.Groups[1].Value;
+            yield return match.Groups[1].Value.Split(" ")[0];
         }
+    }
+
+    private List<string> BuildTags(Item sourceItem)
+    {
+        var tags = new List<string>();
+        
+        tags.AddRange(sourceItem.Categories?.Where(x => x.Domain.Equals("category")).Select(x => x.Value) ?? Array.Empty<string>());
+
+        return tags;
     }
 }

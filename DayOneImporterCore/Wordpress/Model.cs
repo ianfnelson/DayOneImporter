@@ -28,4 +28,16 @@ public class Item : ISourceItem
     
     [XmlElement(ElementName = "encoded", Namespace = "http://purl.org/rss/1.0/modules/content/")]
     public string Content { get; set; }
+    
+    [XmlElement("category")]
+    public List<Category> Categories { get; set; }
+}
+
+public class Category
+{
+    [XmlAttribute("domain")]
+    public string Domain { get; set; }
+    
+    [XmlText]
+    public string Value { get; set; }
 }
