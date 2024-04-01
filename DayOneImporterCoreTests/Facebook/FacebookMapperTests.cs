@@ -1,6 +1,8 @@
 using System.Text.Json;
 using DayOneImporterCore;
-using DayOneImporterCore.Facebook;
+using DayOneImporterCore.Importers.Facebook;
+using DayOneImporterCore.Importers.Facebook.Model;
+using DayOneImporterCore.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -85,7 +87,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var actualText = _sut.BuildText(sourceItem);
+        var actualText = FacebookMapper.BuildText(sourceItem);
 
         // Assert
         actualText.Should().Be("foo");
@@ -105,7 +107,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var actualText = _sut.BuildText(sourceItem);
+        var actualText = FacebookMapper.BuildText(sourceItem);
 
         // Assert
         actualText.Should().Be("bar");
@@ -126,7 +128,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var actualText = _sut.BuildText(sourceItem);
+        var actualText = FacebookMapper.BuildText(sourceItem);
 
         // Assert
         actualText.Should().Be("foo\n\nbar");
@@ -151,7 +153,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var actualText = _sut.BuildText(sourceItem);
+        var actualText = FacebookMapper.BuildText(sourceItem);
 
         // Assert
         actualText.Should().Be("foo\n\nbar");
@@ -177,7 +179,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var actualText = _sut.BuildText(sourceItem);
+        var actualText = FacebookMapper.BuildText(sourceItem);
 
         // Assert
         actualText.Should().Be("foo\n\nbar\n\nwibble");
@@ -197,7 +199,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var actualText = _sut.BuildText(sourceItem);
+        var actualText = FacebookMapper.BuildText(sourceItem);
 
         // Assert
         actualText.Should().Be("Just when I thought I’d seen it all, I encounter an ASP.NET web site project containing a mixture of C# and VB pages! It’s unnatural!");
@@ -232,7 +234,7 @@ public class FacebookMapperTests
         };
         
         // Act
-        var location = _sut.BuildLocation(sourceItem);
+        var location = FacebookMapper.BuildLocation(sourceItem);
 
         // Assert
         location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
@@ -254,7 +256,7 @@ public class FacebookMapperTests
         };
 
         // Act
-        var actualTags = _sut.BuildTags(sourceItem);
+        var actualTags = FacebookMapper.BuildTags(sourceItem);
 
         // Assert
         actualTags.Should().BeEmpty();
@@ -279,7 +281,7 @@ public class FacebookMapperTests
         };
 
         // Act
-        var actualTags = _sut.BuildTags(sourceItem);
+        var actualTags = FacebookMapper.BuildTags(sourceItem);
 
         // Assert
         actualTags.Should().BeEquivalentTo("Jocelyn Nelson", "Isla Nelson");

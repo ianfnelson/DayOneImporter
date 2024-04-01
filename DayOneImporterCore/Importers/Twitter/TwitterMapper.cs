@@ -1,8 +1,10 @@
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
+using DayOneImporterCore.Importers.Twitter.Model;
+using DayOneImporterCore.Model;
 
-namespace DayOneImporterCore.Twitter;
+namespace DayOneImporterCore.Importers.Twitter;
 
 public class TwitterMapper : IEntryMapper<Tweet>
 {
@@ -24,7 +26,7 @@ public class TwitterMapper : IEntryMapper<Tweet>
         return entry;
     }
 
-    private List<Media> BuildMedia(Tweet sourceItem, string mediaFolderRoot)
+    private static List<Media> BuildMedia(Tweet sourceItem, string mediaFolderRoot)
     {
         var output = new List<Media>();
         
@@ -84,14 +86,14 @@ public class TwitterMapper : IEntryMapper<Tweet>
         return output;
     }
 
-    public DateTimeOffset BuildTweetDate(Tweet sourceItem)
+    public static DateTimeOffset BuildTweetDate(Tweet sourceItem)
     {
         var date = DateTime.ParseExact(sourceItem.CreatedAt, "ddd MMM dd HH:mm:ss +ffff yyyy", CultureInfo.InvariantCulture);
 
         return new DateTimeOffset(date);
     }
 
-    public string BuildText(Tweet sourceItem)
+    private static string BuildText(Tweet sourceItem)
     {
         var sb = new StringBuilder(sourceItem.FullText);
 

@@ -1,19 +1,6 @@
 using System.Xml.Serialization;
 
-namespace DayOneImporterCore.Wordpress;
-
-[XmlRoot("rss")]
-public class Rss
-{
-    [XmlElement("channel")]
-    public Channel Channel { get; set; }
-}
-
-public class Channel
-{
-    [XmlElement("item")]
-    public List<Item> Items { get; set; }
-}
+namespace DayOneImporterCore.Importers.Wordpress.Model;
 
 public class Item : ISourceItem
 {
@@ -31,13 +18,4 @@ public class Item : ISourceItem
     
     [XmlElement("category")]
     public List<Category> Categories { get; set; }
-}
-
-public class Category
-{
-    [XmlAttribute("domain")]
-    public string Domain { get; set; }
-    
-    [XmlText]
-    public string Value { get; set; }
 }

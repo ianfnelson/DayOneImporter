@@ -2,9 +2,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DayOneImporterCore;
-using DayOneImporterCore.Facebook;
-using DayOneImporterCore.Twitter;
-using DayOneImporterCore.Wordpress;
+using DayOneImporterCore.Importers.Facebook;
+using DayOneImporterCore.Importers.Facebook.Model;
+using DayOneImporterCore.Importers.Twitter;
+using DayOneImporterCore.Importers.Twitter.Model;
+using DayOneImporterCore.Importers.Wordpress;
+using DayOneImporterCore.Importers.Wordpress.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -24,11 +27,11 @@ var container = containerBuilder.Build();
 
 var startDate = ArgsParser.GetStartDate(args);
 
-// var facebookImporter = container.Resolve<FacebookImporter>();
-// facebookImporter.Import(startDate);
-//
-// var twitterImporter = container.Resolve<TwitterImporter>();
-// twitterImporter.Import(startDate);
+var facebookImporter = container.Resolve<FacebookImporter>();
+facebookImporter.Import(startDate);
+
+var twitterImporter = container.Resolve<TwitterImporter>();
+twitterImporter.Import(startDate);
 
 var wordPressImporter = container.Resolve<WordpressImporter>();
 wordPressImporter.Import(startDate);

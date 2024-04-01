@@ -2,9 +2,11 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using DayOneImporterCore.Importers.Wordpress.Model;
+using DayOneImporterCore.Model;
 using Html2Markdown;
 
-namespace DayOneImporterCore.Wordpress;
+namespace DayOneImporterCore.Importers.Wordpress;
 
 public class WordpressMapper : IEntryMapper<Item>
 {
@@ -90,7 +92,7 @@ public class WordpressMapper : IEntryMapper<Item>
                 }
             }
 
-            string md5OfFile = GetMd5OfFile(localFile);
+            var md5OfFile = GetMd5OfFile(localFile);
             
             string type;
             if (localFile.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
@@ -124,23 +126,19 @@ public class WordpressMapper : IEntryMapper<Item>
 
     private static string GetMd5OfUrl(string url)
     {
-        using (var md5 = MD5.Create())
-        {
-            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(url));
-            return BitConverter.ToString(hash).Replace("-", "");
-        }
+        using var md5 = MD5.Create();
+        
+        var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(url));
+        return BitConverter.ToString(hash).Replace("-", "");
     }
 
     private static string GetMd5OfFile(string filePath)
     {
-        using (var md5 = MD5.Create())
-        {
-            using (var fs = File.OpenRead(filePath))
-            {
-                var hash = md5.ComputeHash(fs);
-                return BitConverter.ToString(hash).Replace("-", "");
-            }
-        }
+        using var md5 = MD5.Create();
+        using var fs = File.OpenRead(filePath);
+        
+        var hash = md5.ComputeHash(fs);
+        return BitConverter.ToString(hash).Replace("-", "");
     }
 
     private static IEnumerable<string> GetImageUrls(string text)
@@ -153,7 +151,7 @@ public class WordpressMapper : IEntryMapper<Item>
         }
     }
 
-    private List<string> BuildTags(Item sourceItem)
+    private static List<string> BuildTags(Item sourceItem)
     {
         var tags = new List<string>();
         

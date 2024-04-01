@@ -1,6 +1,8 @@
 using System.Security.Cryptography;
+using DayOneImporterCore.Importers.Facebook.Model;
+using DayOneImporterCore.Model;
 
-namespace DayOneImporterCore.Facebook;
+namespace DayOneImporterCore.Importers.Facebook;
 
 public class FacebookMapper : IEntryMapper<Post>
 {
@@ -32,7 +34,7 @@ public class FacebookMapper : IEntryMapper<Post>
         return DateTimeOffset.FromUnixTimeSeconds(updateTimestamp);
     }
 
-    public string BuildText(Post sourceItem)
+    public static string BuildText(Post sourceItem)
     {
         var paragraphs = new List<string>();
 
@@ -74,7 +76,7 @@ public class FacebookMapper : IEntryMapper<Post>
         return string.Join("\n\n", paragraphs).FixFacebookEncoding();
     }
 
-    public Location BuildLocation(Post sourceItem)
+    public static Location BuildLocation(Post sourceItem)
     {
         var place = sourceItem.Attachments?
             .SelectMany(x => x.Data)
@@ -100,7 +102,7 @@ public class FacebookMapper : IEntryMapper<Post>
         return location;
     }
 
-    public List<string> BuildTags(Post sourceItem)
+    public static List<string> BuildTags(Post sourceItem)
     {
         var tags = new List<string>();
         

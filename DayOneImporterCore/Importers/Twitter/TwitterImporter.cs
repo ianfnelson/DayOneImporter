@@ -1,18 +1,16 @@
 using System.Text.Json;
+using DayOneImporterCore.Importers.Twitter.Model;
 using Microsoft.Extensions.Logging;
 
-namespace DayOneImporterCore.Twitter;
+namespace DayOneImporterCore.Importers.Twitter;
 
-public class TwitterImporter : ImporterBase<Tweet>
+public class TwitterImporter(ILogger<ImporterBase<Tweet>> logger, IEntryMapper<Tweet> entryMapper)
+    : ImporterBase<Tweet>(logger, entryMapper)
 {
-    public TwitterImporter(ILogger<ImporterBase<Tweet>> logger, IEntryMapper<Tweet> entryMapper) : base(logger, entryMapper)
-    {
-    }
+    protected override int BatchSize => 1000;
 
-    public override int BatchSize => 1000;
-
-    public override string SourceSystemName => "Twitter";
-    public override string MediaFolderRoot => "/Users/ian/dev/Twitter/data/tweets_media/";
+    protected override string SourceSystemName => "Twitter";
+    protected override string MediaFolderRoot => "/Users/ian/dev/Twitter/data/tweets_media/";
     protected override IList<Tweet> LoadSourceItems()
     {
         using FileStream openStream = File.OpenRead("/Users/ian/dev/Twitter/data/tweets.json");

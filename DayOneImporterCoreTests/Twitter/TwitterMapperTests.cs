@@ -1,4 +1,5 @@
-using DayOneImporterCore.Twitter;
+using DayOneImporterCore.Importers.Twitter;
+using DayOneImporterCore.Importers.Twitter.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,7 +26,7 @@ public class TwitterMapperTests
         };
 
         // Act
-        var actualCreationDate = _sut.BuildTweetDate(sourceItem);
+        var actualCreationDate = TwitterMapper.BuildTweetDate(sourceItem);
         
         // Assert
         var expectedCreationDate = new DateTime(2007, 4, 6, 7, 23, 51);

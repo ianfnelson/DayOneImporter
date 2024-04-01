@@ -1,33 +1,24 @@
 using System.IO.Compression;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using DayOneImporterCore.Model;
 using Microsoft.Extensions.Logging;
 using MoreLinq;
 
 namespace DayOneImporterCore;
 
-public interface IImporter
+public abstract class ImporterBase<TSourceItem>(
+    ILogger<ImporterBase<TSourceItem>> logger,
+    IEntryMapper<TSourceItem> entryMapper)
+    : IImporter
+    where TSourceItem : ISourceItem
 {
-    void Import(DateTimeOffset startDate);
-}
+    protected readonly ILogger<ImporterBase<TSourceItem>> Logger = logger;
 
-public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : ISourceItem
-{
-    protected readonly ILogger<ImporterBase<TSourceItem>> Logger;
-    
-    private readonly IEntryMapper<TSourceItem> _entryMapper;
+    protected virtual int BatchSize => 200;
 
-    public ImporterBase(ILogger<ImporterBase<TSourceItem>> logger, IEntryMapper<TSourceItem> entryMapper)
-    {
-        Logger = logger;
-        _entryMapper = entryMapper;
-    }
-    
-    public virtual int BatchSize { get; } = 200;
-    
-    public abstract string SourceSystemName { get; }
-    
-    public abstract string MediaFolderRoot { get; }
+    protected abstract string SourceSystemName { get; }
+
+    protected abstract string MediaFolderRoot { get; }
     
     public void Import(DateTimeOffset startDate)
     {
@@ -56,7 +47,7 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
     {
         foreach (var sourceItem in sourceItems)
         {
-            var entry = _entryMapper.Map(sourceItem, MediaFolderRoot);
+            var entry = entryMapper.Map(sourceItem, MediaFolderRoot);
 
             if (string.IsNullOrEmpty(entry.Text) &&
                 (entry.Photos == null || entry.Photos.Count == 0))
@@ -106,45 +97,15 @@ public abstract class ImporterBase<TSourceItem> : IImporter where TSourceItem : 
         }
     }
     
-    private void WriteOutputFile(IList<Entry> mappedEntries, string batchFolderName)
+    private static void WriteOutputFile(IList<Entry> mappedEntries, string batchFolderName)
     {
         var dayOneFile = new DayOneFile { Entries = mappedEntries };
 
-        using FileStream createStream = File.Create( batchFolderName +"/journal.json");
+        using var createStream = File.Create( batchFolderName +"/journal.json");
 
         var options = new JsonSerializerOptions { WriteIndented = true };
         options.Converters.Add(new CustomDateTimeOffsetConverter("yyyy-MM-ddTHH:mm:ssZ"));
         
         JsonSerializer.Serialize(createStream, dayOneFile, options);
     }
-}
-
-public class CustomDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
-{
-    private readonly string _format;
-
-    public CustomDateTimeOffsetConverter(string format)
-    {
-        _format = format;
-    }
-
-    public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        return DateTime.ParseExact(reader.GetString(), _format, null);
-    }
-
-    public override void Write(Utf8JsonWriter writer, DateTimeOffset date, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(date.ToString(_format));
-    }
-}
-
-public interface ISourceItem
-{
-    
-}
-
-public interface IEntryMapper<TSourceItem> where TSourceItem : ISourceItem
-{
-    Entry Map(TSourceItem sourceItem, string mediaFolderRoot);
 }

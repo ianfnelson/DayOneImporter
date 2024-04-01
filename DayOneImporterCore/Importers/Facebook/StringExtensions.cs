@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace DayOneImporterCore.Facebook;
+namespace DayOneImporterCore.Importers.Facebook;
 
 public static class StringExtensions
 {

@@ -1,16 +1,14 @@
 using System.Xml.Serialization;
+using DayOneImporterCore.Importers.Wordpress.Model;
 using Microsoft.Extensions.Logging;
 
-namespace DayOneImporterCore.Wordpress;
+namespace DayOneImporterCore.Importers.Wordpress;
 
-public class WordpressImporter : ImporterBase<Item>
+public class WordpressImporter(ILogger<ImporterBase<Item>> logger, IEntryMapper<Item> entryMapper)
+    : ImporterBase<Item>(logger, entryMapper)
 {
-    public WordpressImporter(ILogger<ImporterBase<Item>> logger, IEntryMapper<Item> entryMapper) : base(logger, entryMapper)
-    {
-    }
-
-    public override string SourceSystemName => "WordPress";
-    public override string MediaFolderRoot => "/Users/ian/dev/WordPress/media/";
+    protected override string SourceSystemName => "WordPress";
+    protected override string MediaFolderRoot => "/Users/ian/dev/WordPress/media/";
     protected override IList<Item> LoadSourceItems()
     {
         using var openStream = File.OpenRead("/Users/ian/dev/WordPress/wordpress.xml");
