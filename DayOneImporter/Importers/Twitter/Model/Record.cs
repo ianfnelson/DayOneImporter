@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Twitter.Model;
 public class Record 
 {
     [JsonPropertyName("tweet")]
-    public Tweet Tweet { get; set; }
+    public required Tweet Tweet { get; init; }
 }

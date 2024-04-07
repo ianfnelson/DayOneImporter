@@ -5,11 +5,11 @@ namespace DayOneImporter.Importers.Twitter.Model;
 public class TwitterMedia
 {
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; init; }
     
     [JsonPropertyName("media_url")]
-    public string MediaUrl { get; set; }
+    public required string MediaUrl { get; init; }
 
     [JsonPropertyName("video_info")]
-    public object VideoInfo { get; set; }
+    public object? VideoInfo { get; init; }
 }

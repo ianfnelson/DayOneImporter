@@ -5,8 +5,8 @@ namespace DayOneImporter.Importers.Twitter.Model;
 public class Url
 {
     [JsonPropertyName("url")]
-    public string IncludedUrl { get; set; }
+    public required string IncludedUrl { get; init; }
     
     [JsonPropertyName("expanded_url")]
-    public string ExpandedUrl { get; set; }
+    public required string ExpandedUrl { get; init; }
 }

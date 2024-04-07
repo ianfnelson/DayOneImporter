@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Twitter.Model;
 public class Entities
 {
     [JsonPropertyName("urls")]
-    public List<Url> Urls { get; set; }
+    public List<Url>? Urls { get; init; }
 }

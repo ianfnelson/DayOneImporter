@@ -8,20 +8,14 @@ namespace DayOneImporterTests.Importers.Twitter;
 [TestClass]
 public class TwitterMapperTests
 {
-    [TestInitialize]
-    public void Initialize()
-    {
-        _sut = new TwitterMapper();
-    }
-
-    private TwitterMapper _sut;
-
     [TestMethod]
     public void BuildTweetDate_MapsFromCreatedAt()
     {
         // Arrange
         var sourceItem = new Tweet
         {
+            Id = "1234",
+            FullText = "Tweet text",
             CreatedAt = "Fri Apr 06 07:23:51 +0000 2007"
         };
 

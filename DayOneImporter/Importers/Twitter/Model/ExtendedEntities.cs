@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Twitter.Model;
 public class ExtendedEntities
 {
     [JsonPropertyName("media")]
-    public List<TwitterMedia> Media { get; set; }
+    public List<TwitterMedia>? Media { get; init; }
 }
