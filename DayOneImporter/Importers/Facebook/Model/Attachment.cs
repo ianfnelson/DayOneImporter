@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Facebook.Model;
 public class Attachment
 {
     [JsonPropertyName("data")]
-    public List<AttachmentDataItem> Data { get; set; }
+    public required List<AttachmentDataItem> Data { get; init; }
 }

@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Facebook.Model;
 public class ExternalContext
 {
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; init; }
 }

@@ -5,8 +5,8 @@ namespace DayOneImporter.Importers.Facebook.Model;
 public class Coordinate
 {
     [JsonPropertyName("latitude")]
-    public double? Latitude { get; set; }
+    public double Latitude { get; init; }
     
     [JsonPropertyName("longitude")]
-    public double? Longitude { get; set; }
+    public double Longitude { get; init; }
 }

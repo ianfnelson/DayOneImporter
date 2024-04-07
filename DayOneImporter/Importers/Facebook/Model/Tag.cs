@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Facebook.Model;
 public class Tag
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; init; }
 }

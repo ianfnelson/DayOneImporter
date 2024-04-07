@@ -5,17 +5,17 @@ namespace DayOneImporter.Importers.Facebook.Model;
 public class Post : ISourceItem
 {
     [JsonPropertyName("timestamp")]
-    public long Timestamp { get; set; }
+    public long Timestamp { get; init; }
     
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; init; }
     
     [JsonPropertyName("data")]
-    public List<PostDataItem> Data { get; set; }
+    public List<PostDataItem>? Data { get; init; }
     
     [JsonPropertyName("tags")]
-    public List<Tag> Tags { get; set; }
+    public List<Tag>? Tags { get; init; }
     
     [JsonPropertyName("attachments")]
-    public List<Attachment> Attachments { get; set; }
+    public List<Attachment>? Attachments { get; init; }
 }
