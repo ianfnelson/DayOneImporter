@@ -15,9 +15,11 @@ public class WordpressImporter(ILogger<ImporterBase<Item>> logger, IEntryMapper<
         
         var ser = new XmlSerializer(typeof(Rss));
 
-        var rss = (Rss)ser.Deserialize(openStream);
+        var rss = ser.Deserialize(openStream) as Rss;
 
-        return rss.Channel.Items;
+        return rss == null
+            ? throw new InvalidOperationException("Could not deserialize WordPress file to Rss")
+            : rss.Channel.Items;
     }
 
     protected override IList<Item> FilterSourceItems(IList<Item> sourceItems)

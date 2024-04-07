@@ -16,7 +16,7 @@ public class FacebookMapperTests
         _sut = new FacebookMapper();
     }
 
-    private FacebookMapper _sut;
+    private FacebookMapper _sut = null!;
 
     [TestMethod]
     public void BuildCreationDate_MapsFromTimestamp()
@@ -236,9 +236,9 @@ public class FacebookMapperTests
         var location = FacebookMapper.BuildLocation(sourceItem);
 
         // Assert
-        location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
-        location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
-        location.PlaceName.Should().Be("Hull Dock");
+        location?.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
+        location?.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
+        location?.PlaceName.Should().Be("Hull Dock");
     }
 
     [TestMethod]
@@ -429,9 +429,9 @@ public class FacebookMapperTests
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
         Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson was with Jocelyn Nelson at Hull Dock.");
-        entry.Location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
-        entry.Location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
-        entry.Location.PlaceName.Should().Be("Hull Dock");
+        entry.Location?.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
+        entry.Location?.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
+        entry.Location?.PlaceName.Should().Be("Hull Dock");
     }
     
     [TestMethod]
@@ -509,10 +509,10 @@ public class FacebookMapperTests
 
     private Entry MapPostFromFile(string fileName)
     {
-        using FileStream openStream = File.OpenRead("Facebook/" + fileName);
+        using var openStream = File.OpenRead("Facebook/" + fileName);
         var post = JsonSerializer.Deserialize<Post>(openStream);
 
-        var entry = _sut.Map(post, "Facebook/photos");
+        var entry = _sut.Map(post ?? throw new InvalidOperationException("Could not deserialize file to Post"), "Facebook/photos");
 
         return entry;
     }

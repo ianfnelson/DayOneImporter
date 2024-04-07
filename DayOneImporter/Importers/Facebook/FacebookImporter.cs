@@ -16,8 +16,8 @@ public class FacebookImporter(ILogger<ImporterBase<Post>> logger, IEntryMapper<P
         using var openStream = File.OpenRead("/Users/ian/dev/Facebook/posts/your_posts_1.json");
 
         var posts = JsonSerializer.Deserialize<List<Post>>(openStream);
-
-        return posts;
+        
+        return posts ?? throw new InvalidOperationException("Could not deserialize Facebook file to list of Posts");
     }
 
     protected override IList<Post> FilterSourceItems(IList<Post> sourceItems)

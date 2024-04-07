@@ -76,7 +76,7 @@ public class FacebookMapper : IEntryMapper<Post>
         return string.Join("\n\n", paragraphs).FixFacebookEncoding();
     }
 
-    public static Location BuildLocation(Post sourceItem)
+    public static Location? BuildLocation(Post sourceItem)
     {
         var place = sourceItem.Attachments?
             .SelectMany(x => x.Data)

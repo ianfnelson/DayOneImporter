@@ -17,7 +17,8 @@ public class TwitterImporter(ILogger<ImporterBase<Tweet>> logger, IEntryMapper<T
 
         var records = JsonSerializer.Deserialize<List<Record>>(openStream);
 
-        return records.Select(x => x.Tweet).ToList();
+        return (records ?? throw new InvalidOperationException("Could not deserialize Twitter file to List of Records"))
+            .Select(x => x.Tweet).ToList();
     }
 
     protected override IList<Tweet> FilterSourceItems(IList<Tweet> sourceItems)
