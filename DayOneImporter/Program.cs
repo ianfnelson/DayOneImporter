@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using DayOneImporterCore;
-using DayOneImporterCore.Importers.Facebook;
-using DayOneImporterCore.Importers.Facebook.Model;
-using DayOneImporterCore.Importers.Twitter;
-using DayOneImporterCore.Importers.Twitter.Model;
-using DayOneImporterCore.Importers.Wordpress;
-using DayOneImporterCore.Importers.Wordpress.Model;
+using DayOneImporter;
+using DayOneImporter.Importers.Facebook;
+using DayOneImporter.Importers.Facebook.Model;
+using DayOneImporter.Importers.Twitter;
+using DayOneImporter.Importers.Twitter.Model;
+using DayOneImporter.Importers.Wordpress;
+using DayOneImporter.Importers.Wordpress.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -36,15 +36,18 @@ twitterImporter.Import(startDate);
 var wordPressImporter = container.Resolve<WordpressImporter>();
 wordPressImporter.Import(startDate);
 
-public static class ArgsParser
+namespace DayOneImporter
 {
-    public static DateTimeOffset GetStartDate(string[] args)
+    public static class ArgsParser
     {
-        if (args.Length == 0)
+        public static DateTimeOffset GetStartDate(string[] args)
         {
-            return DateTimeOffset.MinValue;
-        }
+            if (args.Length == 0)
+            {
+                return DateTimeOffset.MinValue;
+            }
 
-        return DateTimeOffset.ParseExact(args[0], "yyyyMMdd", CultureInfo.InvariantCulture);
-    } 
+            return DateTimeOffset.ParseExact(args[0], "yyyyMMdd", CultureInfo.InvariantCulture);
+        } 
+    }
 }

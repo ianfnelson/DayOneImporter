@@ -2,9 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayOneImporter", "DayOneImporter\DayOneImporter.csproj", "{02723F57-FCDE-46B5-8954-A1169EF62E56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayOneImporterCore", "DayOneImporterCore\DayOneImporterCore.csproj", "{1393D39A-B6A7-4A05-B6C9-9034E9B12344}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayOneImporterCoreTests", "DayOneImporterCoreTests\DayOneImporterCoreTests.csproj", "{B9CB946A-695E-46D8-A0E1-AC0AE4362F90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayOneImporterTests", "DayOneImporterTests\DayOneImporterTests.csproj", "{B9CB946A-695E-46D8-A0E1-AC0AE4362F90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +14,6 @@ Global
 		{02723F57-FCDE-46B5-8954-A1169EF62E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02723F57-FCDE-46B5-8954-A1169EF62E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02723F57-FCDE-46B5-8954-A1169EF62E56}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1393D39A-B6A7-4A05-B6C9-9034E9B12344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1393D39A-B6A7-4A05-B6C9-9034E9B12344}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1393D39A-B6A7-4A05-B6C9-9034E9B12344}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1393D39A-B6A7-4A05-B6C9-9034E9B12344}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9CB946A-695E-46D8-A0E1-AC0AE4362F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9CB946A-695E-46D8-A0E1-AC0AE4362F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9CB946A-695E-46D8-A0E1-AC0AE4362F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
