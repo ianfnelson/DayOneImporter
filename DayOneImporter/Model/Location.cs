@@ -5,7 +5,7 @@ namespace DayOneImporter.Model;
 public class Location
 {
     [JsonPropertyName("placeName")]
-    public string PlaceName { get; set; }
+    public required string PlaceName { get; init; }
     
     [JsonPropertyName("longitude")]
     public double? Longitude { get; set; }

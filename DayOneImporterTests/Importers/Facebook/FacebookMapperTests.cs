@@ -355,7 +355,7 @@ public class FacebookMapperTests
         var expectedCreationDate = new DateTime(2007, 6, 16, 9, 35, 20);
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedCreationDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson updated his status.\n\nat home");
     }
     
@@ -373,7 +373,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2007, 6, 16, 9, 36, 20);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson updated his status.\n\nat home");
     }
     
@@ -391,7 +391,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2007, 7, 21, 23, 6, 21);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson shared a link.\n\nhttp://del.icio.us/ianfnelson");
     }
     
@@ -409,7 +409,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2013, 12, 20, 9, 31, 46);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson shared a link.\n\nJulie London\n\nI'd Like You For Christmas - Remastered\n\nChristmas Classics");
     }
     
@@ -427,7 +427,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2011, 6, 12, 18, 40, 46);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Ian Nelson was with Jocelyn Nelson at Hull Dock.");
         entry.Location.Longitude.Should().BeApproximately(-0.27011D, 0.00001D);
         entry.Location.Latitude.Should().BeApproximately(53.739455D, 0.00001D);
@@ -448,7 +448,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2008, 11, 20, 11, 59, 11);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Text.Should().Be("Just when I thought I’d seen it all, I encounter an ASP.NET web site project containing a mixture of C# and VB pages! It’s unnatural!");
     }
     
@@ -466,7 +466,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2017, 2, 15, 12, 33, 9);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         entry.Tags.Should()
             .BeEquivalentTo("Colin Lowe", "Sion Harrison", "Peter Windridge-France", "Rosie Middleton Jones");
     }
@@ -485,7 +485,7 @@ public class FacebookMapperTests
         entry.CreationDate.Should().Be(new DateTimeOffset(expectedCreationDate));
         var expectedModifiedDate = new DateTime(2018, 10, 14, 11, 40, 22);
         entry.ModifiedDate.Should().Be(new DateTimeOffset(expectedModifiedDate));
-        entry.TimeZone.Should().Be(@"Europe/London");
+        Entry.TimeZone.Should().Be(@"Europe/London");
         var expectedPhotos = new List<Media>
         {
             new()

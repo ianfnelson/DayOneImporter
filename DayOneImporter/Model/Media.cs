@@ -5,11 +5,11 @@ namespace DayOneImporter.Model;
 public class Media
 {
     [JsonPropertyName("md5")]
-    public required string Md5 { get; set; }
+    public required string Md5 { get; init; }
 
     [JsonPropertyName("type")]
-    public string Type { get; set; } = "jpeg";
+    public string Type { get; init; } = "jpeg";
 
     [JsonIgnore]
-    public string SourceLocation { get; set; }
+    public required string SourceLocation { get; init; }
 }

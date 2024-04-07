@@ -5,26 +5,26 @@ namespace DayOneImporter.Model;
 public class Entry
 {
     [JsonPropertyName("creationDate")]
-    public DateTimeOffset CreationDate { get; set; }
+    public DateTimeOffset CreationDate { get; init; }
     
     [JsonPropertyName("modifiedDate")]
-    public DateTimeOffset ModifiedDate { get; set; }
+    public DateTimeOffset ModifiedDate { get; init; }
 
     [JsonPropertyName("timeZone")] 
-    public string TimeZone { get; set; } = "Europe/London";
-    
+    public static string TimeZone => "Europe/London";
+
     [JsonPropertyName("location")]
-    public Location Location { get; set; }
+    public Location? Location { get; init; }
 
     [JsonPropertyName("photos")] 
-    public List<Media> Photos { get; set; } = new();
+    public List<Media> Photos { get; init; } = [];
 
     [JsonPropertyName("videos")] 
-    public List<Media> Videos { get; set; } = new();
+    public List<Media> Videos { get; init; } = [];
 
     [JsonPropertyName("tags")] 
-    public List<string> Tags { get; set; } = new();
+    public List<string> Tags { get; init; } = [];
     
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public required string Text { get; init; }
 }
