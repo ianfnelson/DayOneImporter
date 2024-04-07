@@ -5,17 +5,17 @@ namespace DayOneImporter.Importers.Wordpress.Model;
 public class Item : ISourceItem
 {
     [XmlElement("title")]
-    public string Title { get; set; }
+    public required string Title { get; init; }
     
     [XmlElement(ElementName="post_date_gmt", Namespace = "http://wordpress.org/export/1.2/")]
-    public string PostDateGmt { get; set; }
+    public required string PostDateGmt { get; init; }
     
     [XmlElement(ElementName = "post_modified_gmt", Namespace = "http://wordpress.org/export/1.2/")]
-    public string PostModifiedGmt { get; set; }
+    public required string PostModifiedGmt { get; init; }
     
     [XmlElement(ElementName = "encoded", Namespace = "http://purl.org/rss/1.0/modules/content/")]
-    public string Content { get; set; }
+    public required string Content { get; init; }
     
     [XmlElement("category")]
-    public List<Category> Categories { get; set; }
+    public List<Category>? Categories { get; init; }
 }

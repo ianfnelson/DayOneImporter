@@ -5,5 +5,5 @@ namespace DayOneImporter.Importers.Wordpress.Model;
 public class Channel
 {
     [XmlElement("item")]
-    public List<Item> Items { get; set; }
+    public required List<Item> Items { get; set; }
 }

@@ -6,5 +6,5 @@ namespace DayOneImporter.Importers.Wordpress.Model;
 public class Rss
 {
     [XmlElement("channel")]
-    public Channel Channel { get; set; }
+    public required Channel Channel { get; init; }
 }

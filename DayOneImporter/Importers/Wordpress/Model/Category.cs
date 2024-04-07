@@ -5,8 +5,8 @@ namespace DayOneImporter.Importers.Wordpress.Model;
 public class Category
 {
     [XmlAttribute("domain")]
-    public string Domain { get; set; }
+    public required string Domain { get; init; }
     
     [XmlText]
-    public string Value { get; set; }
+    public required string Value { get; init; }
 }
