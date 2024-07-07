@@ -19,7 +19,9 @@ public abstract class ImporterBase<TSourceItem>(
     protected abstract string SourceSystemName { get; }
 
     protected abstract string MediaFolderRoot { get; }
-    
+
+    private bool HasMedia => !string.IsNullOrWhiteSpace(MediaFolderRoot);
+
     public void Import(DateTimeOffset startDate)
     {
         Logger.LogInformation("Beginning " + SourceSystemName + " import");
@@ -78,6 +80,8 @@ public abstract class ImporterBase<TSourceItem>(
 
     private void CopyOutputMedia(IList<Entry> mappedEntries, string batchFolderName)
     {
+        if (!HasMedia) return;
+        
         var photoFolderName = batchFolderName + "/photos";
         
         Directory.CreateDirectory(photoFolderName);

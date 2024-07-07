@@ -2,6 +2,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DayOneImporter;
+using DayOneImporter.Importers.BookLog;
+using DayOneImporter.Importers.BookLog.Model;
 using DayOneImporter.Importers.Facebook;
 using DayOneImporter.Importers.Facebook.Model;
 using DayOneImporter.Importers.Twitter;
@@ -17,24 +19,33 @@ serviceCollection.AddLogging(x => x.AddConsole());
 var containerBuilder = new ContainerBuilder();
 
 containerBuilder.RegisterType<FacebookImporter>();
-containerBuilder.RegisterType<TwitterImporter>();
-containerBuilder.RegisterType<WordpressImporter>();
 containerBuilder.RegisterType<FacebookMapper>().As<IEntryMapper<Post>>();
+
+containerBuilder.RegisterType<TwitterImporter>();
 containerBuilder.RegisterType<TwitterMapper>().As<IEntryMapper<Tweet>>();
+
+containerBuilder.RegisterType<WordpressImporter>();
 containerBuilder.RegisterType<WordpressMapper>().As<IEntryMapper<Item>>();
+
+containerBuilder.RegisterType<BookLogImporter>();
+containerBuilder.RegisterType<BookLogMapper>().As<IEntryMapper<Book>>();
+
 containerBuilder.Populate(serviceCollection);
 var container = containerBuilder.Build();
 
 var startDate = ArgsParser.GetStartDate(args);
 
-var facebookImporter = container.Resolve<FacebookImporter>();
-facebookImporter.Import(startDate);
+// var facebookImporter = container.Resolve<FacebookImporter>();
+// facebookImporter.Import(startDate);
+//
+// var twitterImporter = container.Resolve<TwitterImporter>();
+// twitterImporter.Import(startDate);
+//
+// var wordPressImporter = container.Resolve<WordpressImporter>();
+// wordPressImporter.Import(startDate);
 
-var twitterImporter = container.Resolve<TwitterImporter>();
-twitterImporter.Import(startDate);
-
-var wordPressImporter = container.Resolve<WordpressImporter>();
-wordPressImporter.Import(startDate);
+var bookLogImporter = container.Resolve<BookLogImporter>();
+bookLogImporter.Import(startDate);
 
 namespace DayOneImporter
 {

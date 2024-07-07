@@ -27,4 +27,7 @@ public class Entry
     
     [JsonPropertyName("text")]
     public required string Text { get; init; }
+
+    [JsonPropertyName("isAllDay")] 
+    public bool IsAllDay { get; init; } = false;
 }
