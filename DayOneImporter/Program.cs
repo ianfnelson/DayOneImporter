@@ -2,6 +2,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DayOneImporter;
+using DayOneImporter.Importers.Albums;
+using DayOneImporter.Importers.Albums.Model;
 using DayOneImporter.Importers.BookLog;
 using DayOneImporter.Importers.BookLog.Model;
 using DayOneImporter.Importers.Facebook;
@@ -30,6 +32,9 @@ containerBuilder.RegisterType<WordpressMapper>().As<IEntryMapper<Item>>();
 containerBuilder.RegisterType<BookLogImporter>();
 containerBuilder.RegisterType<BookLogMapper>().As<IEntryMapper<Book>>();
 
+containerBuilder.RegisterType<AlbumImporter>();
+containerBuilder.RegisterType<AlbumMapper>().As<IEntryMapper<Album>>();
+
 containerBuilder.Populate(serviceCollection);
 var container = containerBuilder.Build();
 
@@ -43,9 +48,12 @@ var startDate = ArgsParser.GetStartDate(args);
 //
 // var wordPressImporter = container.Resolve<WordpressImporter>();
 // wordPressImporter.Import(startDate);
+//
+// var bookLogImporter = container.Resolve<BookLogImporter>();
+// bookLogImporter.Import(startDate);
 
-var bookLogImporter = container.Resolve<BookLogImporter>();
-bookLogImporter.Import(startDate);
+var albumImporter = container.Resolve<AlbumImporter>();
+albumImporter.Import(startDate);
 
 namespace DayOneImporter
 {

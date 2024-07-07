@@ -23,7 +23,7 @@ public class BookLogMapper : IEntryMapper<Book>
         return new DateTimeOffset(sourceItem.Date);
     }
 
-    private string BuildText(Book sourceItem)
+    private static string BuildText(Book sourceItem)
     {
         return $"{sourceItem.Title}\n\n{sourceItem.Kind}";
     }
